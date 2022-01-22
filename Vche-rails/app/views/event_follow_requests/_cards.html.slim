@@ -24,3 +24,4 @@ div class="event_follows -#{_layout}"
         .actions
           - if loyalty(event_follow_request, 'events/event_follow_requests').withdraw?
             = link_to '取り下げる', withdraw_event_event_follow_request_path(_event, event_follow_request), method: :post, class: 'button -negative'
+        = render 'editor_info', resource: event_follow_request

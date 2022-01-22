@@ -1,0 +1,22 @@
+- user ||= nil
+- event ||= nil
+
+- if user && user.event_follows.empty?
+  .panel.-roundbox
+    p
+      ' 🌱もしかして、あなたは
+      = link_to event.name, event, class: :link
+      '
+      | の開催者ですか？
+    p
+      | 以下のボタンで
+      = inline_role_tag(:owner)
+      | としてイベント情報を登録し直すことで、
+      br
+      b 信頼できる情報
+      | をあなたのイベントの参加者に提供することができます。
+    p
+      = inline_officiality_tag(true)
+      | マークもつきます！
+    .actions
+    = link_to "イベント情報を登録する", new_event_path(role: :owner, name: event.name, hashtag: event.hashtag), class: 'button -positive'

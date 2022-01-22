@@ -4,6 +4,12 @@ module ApplicationHelper
     link_to name, options, { target: :_blank, rel: 'noopener noreferrer' }.reverse_merge(html_options || {}), &block
   end
 
+  def inline_role_tag(value)
+    tag.span class: 'inline -role' do
+      EventFollow.role.find_value(value).text
+    end
+  end
+
   def inline_visibility_tag(value, hide_public: false)
     return if hide_public && value.to_sym == :public
 

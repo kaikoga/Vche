@@ -14,6 +14,9 @@
     - else
       |
   .panel
+    - if event_follow_request.created_user
+      = render 'users/cards', users: [event_follow_request.created_user], card_cloud: true
+      | より、
     span.role = event_follow_request.role_text
     - if _event_history
       | として、特定の開催回への参加を依頼されています。
@@ -24,3 +27,4 @@
       = link_to '辞退する', decline_my_event_follow_request_path(event_follow_request), method: :post, class: 'button -negative'
     - if loyalty(event_follow_request, 'my/event_follow_requests').accept?
       = link_to '受け入れる', accept_my_event_follow_request_path(event_follow_request), method: :post, class: 'button -positive'
+  = render 'editor_info', resource: event_follow_request

@@ -2,8 +2,10 @@
 .inline.-flavor,
 .inline.-officiality,
 .inline.-platform,
-.inline.-visibility,
-.inline.-resolution {
+.inline.-resolution,
+.inline.-role,
+.inline.-visibility
+{
   @include roundbox--small;
   color: $text-light;
 }

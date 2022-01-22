@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_15_070259) do
+ActiveRecord::Schema.define(version: 2022_01_22_133826) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_as_ci", force: :cascade do |t|
     t.string "uid"
@@ -126,6 +126,8 @@ ActiveRecord::Schema.define(version: 2022_01_15_070259) do
     t.datetime "started_at"
     t.string "message", null: false
     t.string "state"
+    t.bigint "created_user_id"
+    t.bigint "updated_user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["approver_id", "state"], name: "index_event_follow_requests_on_approver_id_and_state"

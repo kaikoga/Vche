@@ -2,17 +2,19 @@
 #
 # Table name: event_follow_requests
 #
-#  id          :bigint           not null, primary key
-#  uid         :string(255)
-#  user_id     :bigint           not null
-#  event_id    :bigint           not null
-#  approver_id :bigint           not null
-#  role        :string(255)      not null
-#  started_at  :datetime
-#  message     :string(255)      not null
-#  state       :string(255)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id              :bigint           not null, primary key
+#  uid             :string(255)
+#  user_id         :bigint           not null
+#  event_id        :bigint           not null
+#  approver_id     :bigint           not null
+#  role            :string(255)      not null
+#  started_at      :datetime
+#  message         :string(255)      not null
+#  state           :string(255)
+#  created_user_id :bigint
+#  updated_user_id :bigint
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 # Indexes
 #
@@ -37,6 +39,7 @@ class EventFollowRequest < ApplicationRecord
 
   include Vche::Uid
   include Vche::UidQuery
+  include Vche::EditorFields
 
   validates :role, if: -> { started_at == nil }, exclusion: { in: %w[owner irrelevant], message: 'ではフォロー申請できません' }
   validates :role, if: -> { started_at != nil }, exclusion: { in: %w[irrelevant], message: 'ではフォロー申請できません' }

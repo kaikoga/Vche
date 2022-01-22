@@ -28,10 +28,12 @@ class EventsController < ApplicationController::Bootstrap
 
   def new
     @event = Event.new(capacity: 0)
-    @role = params[:role] == 'owner' ? :owner : :participant
+    @role = new_params[:role] == 'owner' ? :owner : :participant
     authorize! @event
 
     if @role == :owner
+      @event.name = new_params[:name]
+      @event.hashtag = new_params[:hashtag]
       @event.organizer_name = current_user.display_name
       @event.primary_sns = "https://twitter.com/#{current_user.email}"
       @event.info_url = "https://twitter.com/#{current_user.email}"
@@ -109,7 +111,9 @@ class EventsController < ApplicationController::Bootstrap
     authorize! @event
     @user = find_user
 
-    Operations::Event::RequestUpdateUserRole.new(event: @event, user: @user, approver: @user, role: params[:role]).perform!
+    Operations::Event::RequestUpdateUserRole.new(
+      event: @event, creator: current_user, user: @user, approver: @user, role: params[:role]
+    ).perform!
     redirect_to event_event_follows_url(@event), notice: I18n.t('notice.events.add_user.success')
   rescue ActiveRecord::RecordInvalid
     redirect_to event_event_follows_url(@event)
@@ -165,6 +169,10 @@ class EventsController < ApplicationController::Bootstrap
 
   def show_params
     params.permit(:calendar, :date)
+  end
+
+  def new_params
+    @new_params ||= params.permit(:role, :name, :hashtag)
   end
 
   def create_params

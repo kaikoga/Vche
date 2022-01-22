@@ -98,7 +98,9 @@ class Events::EventHistoriesController < ApplicationController::Bootstrap
     authorize! @event_history
     @user = find_user
 
-    Operations::EventHistory::RequestUpdateUserRole.new(event_history: @event_history, user: @user, approver: @user, role: params[:role]).perform!
+    Operations::EventHistory::RequestUpdateUserRole.new(
+      event_history: @event_history, creator: current_user, user: @user, approver: @user, role: params[:role]
+    ).perform!
     redirect_to event_event_history_event_attendances_path(@event, @event_history), notice: I18n.t('notice.events/event_histories.add_user.success')
   rescue ActiveRecord::RecordInvalid
     redirect_to event_event_history_event_attendances_path(@event, @event_history)

@@ -3,8 +3,9 @@ class Operations::EventHistory::RequestUpdateUserRole
 
   class Outsider < StandardError; end
 
-  def initialize(event_history:, user:, approver:, role:)
+  def initialize(event_history:, creator:, user:, approver:, role:)
     @event_history = event_history
+    @creator = creator
     @user = user
     @approver = approver
     @role = role&.to_sym
@@ -18,7 +19,7 @@ class Operations::EventHistory::RequestUpdateUserRole
   def perform
     if role
       event_follow_requests.find_or_initialize_by({}).tap do |efr|
-        efr.assign_attributes(approver: approver, role: role, message: '')
+        efr.assign_attributes(approver: approver, role: role, message: '', created_user: creator, updated_user: creator)
         efr.save!
       end
     else
@@ -28,7 +29,7 @@ class Operations::EventHistory::RequestUpdateUserRole
 
   private
 
-  attr_reader :event_history, :user, :approver, :role
+  attr_reader :event_history, :creator, :user, :approver, :role
 
   def event_follow_requests
     user.event_follow_requests.where(event: event_history.event, started_at: event_history.started_at)

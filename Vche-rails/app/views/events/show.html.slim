@@ -6,6 +6,9 @@ h1 = "#{Event.model_name.human}詳細"
 
 = render 'pretty', event: @event
 
+- unless @event.official?
+  = render 'welcome_owners', event: @event, user: @user
+
 = render 'hashtags/event_cards', hashtag: @event.hashtag
 
 h2 = EventMemory.model_name.human

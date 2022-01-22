@@ -13,7 +13,10 @@ h1 = "#{Event.model_name.human}を新しく登録する"
     = link_to('参加するイベントの情報を登録する', new_event_path, class: 'button -positive')
 
 .panel.-roundbox
-  p あるいは、もしあなたがイベントを開催するのであれば、以下のボタンから主催としてイベント情報を新規登録できます。
+  p
+    | あるいは、もしあなたがイベントを開催するのであれば、以下のボタンから
+    = inline_role_tag(:owner)
+    | としてイベント情報を新規登録できます。
   p
     = link_to('新規イベントを主催する', new_event_path(role: :owner), class: 'button -positive')
 

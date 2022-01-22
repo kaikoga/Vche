@@ -3,8 +3,9 @@ class Operations::Event::RequestUpdateUserRole
 
   class UserIsOwner < StandardError; end
 
-  def initialize(event:, user:, approver:, role:)
+  def initialize(event:, creator:, user:, approver:, role:)
     @event = event
+    @creator = creator
     @user = user
     @approver = approver
     @role = role&.to_sym
@@ -19,7 +20,7 @@ class Operations::Event::RequestUpdateUserRole
   def perform
     if role
       event_follow_requests.find_or_initialize_by({}).tap do |efr|
-        efr.assign_attributes(approver: approver, role: role, message: '')
+        efr.assign_attributes(approver: approver, role: role, message: '', created_user: creator, updated_user: creator)
         efr.save!
       end
     else
@@ -29,7 +30,7 @@ class Operations::Event::RequestUpdateUserRole
 
   private
 
-  attr_reader :event, :user, :approver, :role
+  attr_reader :event, :creator, :user, :approver, :role
 
   def event_follow_requests
     user.event_follow_requests.where(event: event, started_at: nil)
